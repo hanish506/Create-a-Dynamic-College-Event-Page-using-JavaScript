@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HNSIT College Events</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      background:#f4f6f9;
+      color:#333;
+    }
+
+    /* ===== HEADER ===== */
+    header{
+      background:#0a3d62;
+      color:white;
+      padding:15px 30px;
+    }
+
+    .header-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .logo img{
+      width:50px;
+      height:50px;
+    }
+
+    nav ul{
+      display:flex;
+      gap:20px;
+      list-style:none;
+    }
+
+    nav a{
+      color:white;
+      text-decoration:none;
+      font-weight:bold;
+    }
+
+    .search-bar{
+      margin-top:15px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .search-bar input,
+    .search-bar select{
+      padding:8px;
+      width:200px;
+      border-radius:4px;
+      border:none;
+    }
+
+    /* ===== EVENTS SECTION ===== */
+    .container{
+      padding:30px;
+    }
+
+    .events{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:20px;
+    }
+
+    .event-card{
+      background:white;
+      padding:20px;
+      border-radius:6px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      transition:transform 0.2s;
+    }
+
+    .event-card:hover{
+      transform:translateY(-5px);
+    }
+
+    .event-card h3{
+      color:#0a3d62;
+      margin-bottom:8px;
+    }
+
+    .event-card p{
+      margin:5px 0;
+    }
+
+    .event-card button{
+      margin-top:10px;
+      padding:8px 14px;
+      background:#0a3d62;
+      color:white;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+    }
+
+    /* ===== PAGINATION ===== */
+    .pagination{
+      margin-top:30px;
+      display:flex;
+      justify-content:center;
+      gap:15px;
+    }
+
+    .pagination button{
+      padding:8px 16px;
+      cursor:pointer;
+      border:none;
+      background:#0a3d62;
+      color:white;
+      border-radius:4px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer{
+      background:#0a3d62;
+      color:white;
+      text-align:center;
+      padding:20px;
+      margin-top:40px;
+    }
+
+    footer a{
+      color:white;
+      margin:0 10px;
+      text-decoration:none;
+      font-weight:bold;
+    }
+
+    @media(max-width:600px){
+      nav ul{
+        flex-direction:column;
+        gap:10px;
+      }
+
+      .search-bar{
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="header-top">
+    <div class="logo">
+      <img src="https://via.placeholder.com/50" alt="HNSIT Logo">
+      <h1>Hanish Institute of Technology <br><span style="font-size:16px;font-weight:normal;">(HNSIT)</span></h1>
+    </div>
+
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="#">Admissions</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search by title or date">
+    <select id="categoryFilter">
+      <option value="All">All Categories</option>
+      <option value="Sports">Sports</option>
+      <option value="Workshop">Workshops</option>
+      <option value="Lecture">Guest Lectures</option>
+    </select>
+  </div>
+</header>
+
+<!-- ===== EVENTS ===== -->
+<div class="container">
+  <div class="events" id="eventList"></div>
+
+  <div class="pagination">
+    <button onclick="prevPage()">Previous</button>
+    <button onclick="nextPage()">Next</button>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>Contact: +91 98765 43210 | hnsit@college.edu</p>
+  <p>
+    <a href="#">LinkedIn</a>
+    <a href="#">Facebook</a>
+    <a href="#">Twitter</a>
+  </p>
+  <p>© 2026 Hanish Institute of Technology (HNSIT)</p>
+</footer>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  const events = [
+    {
+      title:"HNSIT Football Tournament",
+      date:"2026-02-05",
+      category:"Sports",
+      description:"Inter-college football competition at HNSIT campus."
+    },
+    {
+      title:"AI & Machine Learning Workshop",
+      date:"2026-02-08",
+      category:"Workshop",
+      description:"Hands-on workshop on AI and ML technologies."
+    },
+    {
+      title:"Cyber Security Guest Lecture",
+      date:"2026-02-10",
+      category:"Lecture",
+      description:"Industry expert session on cybersecurity trends."
+    },
+    {
+      title:"Basketball Championship",
+      date:"2026-02-12",
+      category:"Sports",
+      description:"Annual HNSIT basketball championship."
+    },
+    {
+      title:"Web Development Bootcamp",
+      date:"2026-02-14",
+      category:"Workshop",
+      description:"Learn HTML, CSS, JavaScript from scratch."
+    },
+    {
+      title:"Data Science Career Talk",
+      date:"2026-02-16",
+      category:"Lecture",
+      description:"Guidance on data science career paths."
+    }
+  ];
+
+  const eventsPerPage = 3;
+  let currentPage = 1;
+
+  function displayEvents(){
+    const list = document.getElementById("eventList");
+    list.innerHTML = "";
+
+    const searchText = document.getElementById("searchInput").value.toLowerCase();
+    const category = document.getElementById("categoryFilter").value;
+
+    const filteredEvents = events.filter(event =>
+      (event.title.toLowerCase().includes(searchText) || event.date.includes(searchText)) &&
+      (category === "All" || event.category === category)
+    );
+
+    const startIndex = (currentPage - 1) * eventsPerPage;
+    const paginatedEvents = filteredEvents.slice(startIndex, startIndex + eventsPerPage);
+
+    paginatedEvents.forEach(event => {
+      const card = document.createElement("div");
+      card.className = "event-card";
+      card.innerHTML = `
+        <h3>${event.title}</h3>
+        <p><strong>Date:</strong> ${event.date}</p>
+        <p><strong>Category:</strong> ${event.category}</p>
+        <p>${event.description}</p>
+        <button>View Details</button>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function nextPage(){
+    currentPage++;
+    displayEvents();
+  }
+
+  function prevPage(){
+    if(currentPage > 1){
+      currentPage--;
+      displayEvents();
+    }
+  }
+
+  document.getElementById("searchInput").addEventListener("input", () => {
+    currentPage = 1;
+    displayEvents();
+  });
+
+  document.getElementById("categoryFilter").addEventListener("change", () => {
+    currentPage = 1;
+    displayEvents();
+  });
+
+  displayEvents();
+</script>
+
+</body>
+</html>
